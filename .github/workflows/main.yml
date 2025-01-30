@@ -23,7 +23,7 @@ jobs:
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         application_name: react_native_aws
         environment_name: Reactnativeaws-env
-        version_label: "v${{ github.run_number }}"
+        version_label: "v${{ github.run_number + 1 }}"
         region: eu-north-1
         deployment_package: deploy.zip
         wait_for_deployment: false
