@@ -20,7 +20,6 @@ jobs:
       with:
         aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        mongodb_uri: ${{ secrets.MONGO_URI }}
         application_name: react_native_aws
         environment_name: Reactnativeaws-env
         version_label: 1.
