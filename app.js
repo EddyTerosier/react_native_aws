@@ -40,34 +40,34 @@ io.on("connection", (socket) => {
     console.log(`⚡ Utilisateur connecté: ${socket.id}`);
 
     // Enregistrement de l'utilisateur
-    socket.on("registerUser", async (email) => {
+    socket.on('registerUser', async (email) => {
         try {
-            let user = await User.findOne({ email });
-
+            // 1) Rechercher l'utilisateur existant
+            const user = await User.findOne({ email });
             if (!user) {
-                user = new User({
-                    email,
-                    password: "placeholder",
-                    socketId: socket.id
-                });
-                await user.save();
-            } else {
-                user.socketId = socket.id;
-                await user.save();
+                // Si inexistant, on envoie une erreur
+                socket.emit('errorMessage', 'Utilisateur non trouvé');
+                return;
             }
 
-            socket.emit("userRegistered", { userId: user._id, email: user.email });
-            console.log(`✅ Utilisateur enregistré : ${email}`);
+            // 2) Mettre à jour son socketId
+            user.socketId = socket.id;
+            await user.save();
 
+            // 3) Émettre "userRegistered" pour le client
+            socket.emit('userRegistered', { userId: user._id, email: user.email });
+            console.log(`✅ Utilisateur mis à jour (socketId) : ${email}`);
+
+            // 4) Charger et envoyer l’historique de messages
             const messages = await Message.find({
                 $or: [{ sender: user._id }, { receiver: user._id }]
-            }).populate("sender receiver", "email");
+            }).populate('sender receiver', 'email');
 
-            socket.emit("previousMessages", messages);
+            socket.emit('previousMessages', messages);
 
             emitUsers();
         } catch (err) {
-            console.error("❌ Erreur lors de l’enregistrement utilisateur:", err);
+            console.error('❌ Erreur lors du registerUser via socket:', err);
         }
     });
 

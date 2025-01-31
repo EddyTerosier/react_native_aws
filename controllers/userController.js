@@ -45,7 +45,14 @@ const loginUser = async (req, res) => {
             { expiresIn: process.env.JWT_EXPIRES_IN }
         );
 
-        res.status(200).send({ message: "Connecté", token });
+        res.status(200).send({
+            message: "Connecté",
+            token,
+            user: {
+                _id: user._id,
+                email: user.email
+            }
+        });
     } catch (error) {
         res.status(500).send({ message: error.message });
     }
