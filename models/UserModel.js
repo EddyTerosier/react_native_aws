@@ -8,8 +8,12 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true,
-    }
-})
+        required: false,
+    },
+    socketId: {
+        type: String,
+        default: null,
+    },
+});
 
 module.exports = mongoose.model("User", userSchema);
