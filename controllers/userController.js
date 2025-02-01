@@ -61,7 +61,7 @@ const loginUser = async (req, res) => {
 const fetchAllUsers = async (req, res) => {
     try {
         const user = await User.find();
-        console.log(user);
+        // console.log(user);
         res.status(200).send(user);
     } catch (error) {
         res.status(500).send({ message: error.message });
